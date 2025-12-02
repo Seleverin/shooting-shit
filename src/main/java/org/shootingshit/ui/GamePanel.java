@@ -13,6 +13,6 @@ public class GamePanel extends JPanel {
         Graphics2D g2d = (Graphics2D) g;
 
         int rand = (int) Math.floor(Math.random()*100);
-        g2d.drawRect(0,0,100,rand);
+        g2d.drawRect(0,0,rand,rand);
     }
 }
