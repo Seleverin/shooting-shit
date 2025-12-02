@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-<<<<<<< HEAD
-=======
     <annotationProcessing>
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
@@ -13,7 +11,6 @@
         <module name="shooting-shit.main" />
       </profile>
     </annotationProcessing>
->>>>>>> df9d20f (initial commit)
     <bytecodeTargetLevel target="21" />
   </component>
 </project>
