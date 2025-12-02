@@ -2,7 +2,11 @@ plugins {
     id 'java'
 }
 
+<<<<<<< HEAD
 group = 'sev.shootingshit'
+=======
+group = 'org.shootingshit'
+>>>>>>> df9d20f (initial commit)
 version = '1.0-SNAPSHOT'
 
 repositories {
@@ -12,6 +16,16 @@ repositories {
 dependencies {
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+<<<<<<< HEAD
+=======
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok:1.18.32'
+    annotationProcessor 'org.projectlombok:lombok:1.18.32'
+
+    testCompileOnly 'org.projectlombok:lombok:1.18.32'
+    testAnnotationProcessor 'org.projectlombok:lombok:1.18.32'
+>>>>>>> df9d20f (initial commit)
 }
 
 test {
