@@ -1,7 +1,7 @@
-package org.shootingshit.ui;
+package ui;
 
-import org.shootingshit.Transform2D;
-import org.shootingshit.entity.Player;
+import entity.Player;
+import util.Transform2D;
 
 import javax.swing.*;
 import java.awt.event.KeyEvent;

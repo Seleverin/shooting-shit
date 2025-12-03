@@ -1,11 +1,7 @@
-package org.shootingshit.entity;
+package entity;
 
-import lombok.Data;
-import org.shootingshit.Transform2D;
+import util.Transform2D;
 
-import javax.xml.transform.TransformerFactory;
-
-@Data
 public abstract class Entity {
     private int health;
     private float movementSpeed;
@@ -30,5 +26,9 @@ public abstract class Entity {
 
     public void move(Transform2D direction){
         transform.addDirection(direction, movementSpeed);
+    }
+
+    public Transform2D getTransform(){
+        return transform;
     }
 }

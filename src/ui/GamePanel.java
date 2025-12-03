@@ -1,6 +1,6 @@
-package org.shootingshit.ui;
+package ui;
 
-import org.shootingshit.entity.Player;
+import entity.Player;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,9 +21,6 @@ public class GamePanel extends JPanel {
     public void paint(Graphics g){
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        int rand = (int) Math.floor(Math.random()*100);
-        g2d.drawRect(0,0,rand,rand);
 
         paintPlayer(g2d);
     }

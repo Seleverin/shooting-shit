@@ -1,6 +1,4 @@
-package org.shootingshit;
-
-import lombok.Data;
+package util;
 
 public class Transform2D {
     public int x;
