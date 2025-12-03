@@ -24,9 +24,7 @@ public abstract class Entity {
         }
     }
 
-    public void move(Transform2D direction){
-        transform.addDirection(direction, movementSpeed);
-    }
+    public abstract void move();
 
     public Transform2D getTransform(){
         return transform;
