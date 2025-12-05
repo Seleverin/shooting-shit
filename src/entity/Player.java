@@ -11,7 +11,8 @@ public class Player extends Entity {
         super(health, moveSpeed, transform);
     }
 
-    public void move(Transform2D direction){
-        transform.addDirection(direction, moveSpeed);
+    @Override
+    public void move(Transform2D direction) {
+//        transform.addDirection(direction, movementSpeed);
     }
 }

@@ -1,6 +1,8 @@
 package ui;
 
+import entity.Entity;
 import entity.Player;
+import util.InputData;
 import util.Transform2D;
 
 import javax.swing.*;
@@ -10,12 +12,15 @@ import java.awt.event.*;
 //
 // Main Game- and Input-Loop + managing and processing data to be shown on screen by the GamePanel-Class
 //
-public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
+public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener, Runnable {
     // Variables
-    private Player player = new Player(100, 10f, new Transform2D(10,10));
+    private Player player = new Player(100, 3f, new Transform2D(10,10));
     private Transform2D mouseTransform = new Transform2D();
 
-    private GamePanel gamePanel = new GamePanel(player, mouseTransform);
+    // Controls
+    private boolean up, down, left, right;
+
+    private GamePanel gamePanel = new GamePanel(this);
 
     // Main Game-Loop
     public MainFrame(){
@@ -36,6 +41,10 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         add(gamePanel);
 
         setVisible(true);
+
+        // Game Loop
+        Thread gameThread = new Thread(this);
+        gameThread.start();
     }
 
 
@@ -47,31 +56,23 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
-        Transform2D direction = new Transform2D(0,0);
-
-        System.out.println(keyEvent);
-
-        char keyChar = keyEvent.getKeyChar();
-        if(keyEvent.getKeyChar() == 'w'){
-            direction.y = -1;
+        switch (keyEvent.getKeyCode()) {
+            case KeyEvent.VK_W -> up = true;
+            case KeyEvent.VK_S -> down = true;
+            case KeyEvent.VK_A -> left = true;
+            case KeyEvent.VK_D -> right = true;
         }
-        if(keyEvent.getKeyChar() == 'a'){
-            direction.x = -1;
-        }
-        if(keyEvent.getKeyChar() == 's'){
-            direction.y = 1;
-        }
-        if(keyEvent.getKeyChar() == 'd'){
-            direction.x = 1;
-        }
-
-        player.move(direction);
-
-        gamePanel.repaint();
     }
 
     @Override
-    public void keyReleased(KeyEvent keyEvent) {}
+    public void keyReleased(KeyEvent keyEvent) {
+        switch (keyEvent.getKeyCode()) {
+            case KeyEvent.VK_W -> up = false;
+            case KeyEvent.VK_S -> down = false;
+            case KeyEvent.VK_A -> left = false;
+            case KeyEvent.VK_D -> right = false;
+        }
+    }
 
     //
     // Mouse Listener Methods
@@ -98,19 +99,40 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     public void mouseDragged(MouseEvent e) {
         mouseTransform.x = e.getX() - 25;
         mouseTransform.y = e.getY() - 45;
-
-        gamePanel.setMouseTransform(mouseTransform);
-
-        gamePanel.repaint();
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
         mouseTransform.x = e.getX() - 25;
         mouseTransform.y = e.getY() - 45;
+    }
 
-        gamePanel.setMouseTransform(mouseTransform);
+    @Override
+    public void run() {
+        while (true) {
 
-        gamePanel.repaint();
+            if (up) player.getTransform().y -= (int) player.getMovementSpeed();
+            if (down) player.getTransform().y += (int) player.getMovementSpeed();
+            if (left) player.getTransform().x -= (int) player.getMovementSpeed();
+            if (right) player.getTransform().x += (int) player.getMovementSpeed();
+
+            gamePanel.repaint();
+
+            // 60 FPS
+            try {
+                Thread.sleep(16);
+            }
+            catch (InterruptedException e) {
+                throw new RuntimeException("An error occurred while executing the main Game-Loop! "+e);
+            }
+        }
+    }
+
+    public Player getPlayer(){
+        return this.player;
+    }
+
+    public Transform2D getMouseTransform(){
+        return this.mouseTransform;
     }
 }

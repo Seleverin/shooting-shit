@@ -8,7 +8,9 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void move(){
-        
+    public void move(Transform2D direction) {
+
     }
+
+
 }

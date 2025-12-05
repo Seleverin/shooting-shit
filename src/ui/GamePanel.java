@@ -11,14 +11,15 @@ import java.awt.*;
 //
 public class GamePanel extends JPanel {
 
+    private MainFrame parentMainFrame;
+
     private Player player;
-    private Transform2D mouseTransform;
 
     public GamePanel(){}
 
-    public GamePanel(Player player, Transform2D mouseTransform){
-        this.player = player;
-        this.mouseTransform = mouseTransform;
+    public GamePanel(MainFrame mainFrame){
+        this.parentMainFrame = mainFrame;
+        this.player = mainFrame.getPlayer();
     }
 
     public void paint(Graphics g){
@@ -27,9 +28,9 @@ public class GamePanel extends JPanel {
 
         g2d.fillRect(10,10,100,100);
 
-        paintPlayer(g2d);
-
         paintCursor(g2d);
+
+        paintPlayer(g2d);
     }
 
 
@@ -48,18 +49,14 @@ public class GamePanel extends JPanel {
 
     private void paintCursor(Graphics2D g2d){
         short distance2PlayerScale = (short) (Math.sqrt(
-                Math.pow(mouseTransform.x - player.getTransform().x, 2) + Math.pow(mouseTransform.y - player.getTransform().y, 2)
+                Math.pow(parentMainFrame.getMouseTransform().x - player.getTransform().x, 2) + Math.pow(parentMainFrame.getMouseTransform().y - player.getTransform().y, 2)
         ) / 10 + 10);
 
-        g2d.drawRoundRect(mouseTransform.x, mouseTransform.y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
+        g2d.drawRoundRect(parentMainFrame.getMouseTransform().x, parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
 
         g2d.drawLine(
                 player.getTransform().x + 10, player.getTransform().y + 10,
-                mouseTransform.x +distance2PlayerScale/2, mouseTransform.y +distance2PlayerScale/2
+                parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
         );
-    }
-
-    public void setMouseTransform(Transform2D mouseTransform){
-        this.mouseTransform = mouseTransform;
     }
 }

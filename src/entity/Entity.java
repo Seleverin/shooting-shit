@@ -3,9 +3,9 @@ package entity;
 import util.Transform2D;
 
 public abstract class Entity {
-    private int health;
-    private float movementSpeed;
-    private Transform2D transform;
+    protected int health;
+    protected float movementSpeed;
+    protected Transform2D transform;
 
     public Entity(){}
 
@@ -24,9 +24,11 @@ public abstract class Entity {
         }
     }
 
-    public abstract void move();
+    public abstract void move(Transform2D direction);
 
     public Transform2D getTransform(){
         return transform;
     }
+
+    public float getMovementSpeed(){return movementSpeed;}
 }
