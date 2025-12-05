@@ -26,6 +26,7 @@ public abstract class Entity {
 
     public abstract void move(Transform2D direction);
 
+
     public Transform2D getTransform(){
         return transform;
     }

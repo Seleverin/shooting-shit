@@ -1,25 +1,31 @@
 package ui;
 
+import entity.Enemy;
 import entity.Entity;
 import entity.Player;
-import util.InputData;
 import util.Transform2D;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
+import java.util.List;
 
 //
 // Main Game- and Input-Loop + managing and processing data to be shown on screen by the GamePanel-Class
 //
-public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener, Runnable {
-    // Variables
+public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
+    // Player
     private Player player = new Player(100, 3f, new Transform2D(10,10));
     private Transform2D mouseTransform = new Transform2D();
-
-    // Controls
     private boolean up, down, left, right;
 
+    // Entities
+    private int enemySpawnCooldown = 10000;
+    private int timeSinceLastEnemySpawn = 15000;
+    private List<Entity> entities = new ArrayList<>();
+
+    // Display
     private GamePanel gamePanel = new GamePanel(this);
 
     // Main Game-Loop
@@ -42,9 +48,41 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
         setVisible(true);
 
-        // Game Loop
-        Thread gameThread = new Thread(this);
-        gameThread.start();
+        // Add entities
+        entities.add(new Enemy(100, 2.0f, new Transform2D(250,250)));
+
+        //
+        // Main Game-Loop (60 FPS)
+        //
+
+        long startTime = System.currentTimeMillis();
+        int deltaTime = 16;
+        Timer timer = new Timer(deltaTime, e -> {
+            // Get time
+            long elapsedTime = System.currentTimeMillis() - startTime;
+
+            // Spawn stuff
+            if (timeSinceLastEnemySpawn <= 0) {
+                this.entities.add(new Enemy(100, 2f, new Transform2D(250,250)));
+                timeSinceLastEnemySpawn = enemySpawnCooldown;
+            }
+            timeSinceLastEnemySpawn -= deltaTime;
+
+            // Entities
+            for(Entity entity : this.entities){
+                entity.move(player.getTransform());
+            }
+
+            // Player Input
+            if (up) player.getTransform().y -= (int) player.getMovementSpeed();
+            if (down) player.getTransform().y += (int) player.getMovementSpeed();
+            if (left) player.getTransform().x -= (int) player.getMovementSpeed();
+            if (right) player.getTransform().x += (int) player.getMovementSpeed();
+
+            // Display
+            gamePanel.repaint();
+        });
+        timer.start();
     }
 
 
@@ -107,26 +145,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         mouseTransform.y = e.getY() - 45;
     }
 
-    @Override
-    public void run() {
-        while (true) {
-
-            if (up) player.getTransform().y -= (int) player.getMovementSpeed();
-            if (down) player.getTransform().y += (int) player.getMovementSpeed();
-            if (left) player.getTransform().x -= (int) player.getMovementSpeed();
-            if (right) player.getTransform().x += (int) player.getMovementSpeed();
-
-            gamePanel.repaint();
-
-            // 60 FPS
-            try {
-                Thread.sleep(16);
-            }
-            catch (InterruptedException e) {
-                throw new RuntimeException("An error occurred while executing the main Game-Loop! "+e);
-            }
-        }
-    }
 
     public Player getPlayer(){
         return this.player;
@@ -134,5 +152,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     public Transform2D getMouseTransform(){
         return this.mouseTransform;
+    }
+
+    public List<Entity> getEntities(){
+        return this.entities;
     }
 }

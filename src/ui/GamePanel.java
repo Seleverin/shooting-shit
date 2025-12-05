@@ -1,10 +1,12 @@
 package ui;
 
+import entity.Entity;
 import entity.Player;
 import util.Transform2D;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
 //
 // Class for displaying the game on screen according to data given by the MainFrame-Class
@@ -29,8 +31,9 @@ public class GamePanel extends JPanel {
         g2d.fillRect(10,10,100,100);
 
         paintCursor(g2d);
-
         paintPlayer(g2d);
+
+        paintEntities(g2d);
     }
 
 
@@ -39,7 +42,7 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.ORANGE);
 
         g2d.fillRoundRect(
-                player.getTransform().x,player.getTransform().y,
+                (int)player.getTransform().x,(int)player.getTransform().y,
                 20,20,
                 100,100
         );
@@ -52,11 +55,25 @@ public class GamePanel extends JPanel {
                 Math.pow(parentMainFrame.getMouseTransform().x - player.getTransform().x, 2) + Math.pow(parentMainFrame.getMouseTransform().y - player.getTransform().y, 2)
         ) / 10 + 10);
 
-        g2d.drawRoundRect(parentMainFrame.getMouseTransform().x, parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
+        g2d.drawRoundRect((int)parentMainFrame.getMouseTransform().x, (int)parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
 
         g2d.drawLine(
-                player.getTransform().x + 10, player.getTransform().y + 10,
-                parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
+                (int)player.getTransform().x + 10, (int)player.getTransform().y + 10,
+                (int)parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, (int)parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
         );
+    }
+
+    private void paintEntities(Graphics2D g2d){
+        g2d.setColor(Color.RED);
+
+        for(Entity entity : parentMainFrame.getEntities()){
+            g2d.fillRoundRect(
+                    (int)entity.getTransform().x, (int)entity.getTransform().y,
+                    20,20,
+                    100,100
+            );
+        }
+
+        g2d.setColor(Color.BLACK);
     }
 }

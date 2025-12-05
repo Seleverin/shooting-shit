@@ -8,8 +8,10 @@ public class Enemy extends Entity {
     }
 
     @Override
-    public void move(Transform2D direction) {
+    public void move(Transform2D playerTransform) {
+        Transform2D direction = new Transform2D(playerTransform.x - transform.x, playerTransform.y - transform.y);
 
+        transform.addDirection(direction, movementSpeed);
     }
 
 
