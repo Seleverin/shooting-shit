@@ -34,6 +34,9 @@ public class GamePanel extends JPanel {
         paintPlayer(g2d);
 
         paintEntities(g2d);
+
+        // Debug
+        paintHitboxes(g2d);
     }
 
 
@@ -73,6 +76,24 @@ public class GamePanel extends JPanel {
                     100,100
             );
         }
+
+        g2d.setColor(Color.BLACK);
+    }
+
+    private void paintHitboxes(Graphics2D g2d){
+        g2d.setColor(Color.BLUE);
+
+        for(Entity entity : parentMainFrame.getEntities()){
+            g2d.drawRect(
+                    (int)entity.getTransform().x, (int)entity.getTransform().y,
+                    (int)entity.getCollider().width,(int)entity.getCollider().height
+            );
+        }
+
+        g2d.drawRect(
+                (int)player.getTransform().x, (int)player.getTransform().y,
+                (int)player.getCollider().width,(int)player.getCollider().height
+        );
 
         g2d.setColor(Color.BLACK);
     }

@@ -3,11 +3,13 @@ package ui;
 import entity.Enemy;
 import entity.Entity;
 import entity.Player;
+import util.Collider2D;
 import util.Transform2D;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.Dimension2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +18,20 @@ import java.util.List;
 //
 public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
     // Player
-    private Player player = new Player(100, 3f, new Transform2D(10,10));
+    private Player player = new Player(
+            100, 3f,
+            new Transform2D(10,10), new Collider2D(25,25)
+    );
     private Transform2D mouseTransform = new Transform2D();
     private boolean up, down, left, right;
 
     // Entities
-    private int enemySpawnCooldown = 10000;
-    private int timeSinceLastEnemySpawn = 15000;
-    private List<Entity> entities = new ArrayList<>();
+    private final int enemySpawnCooldown = 10000;
+    private int timeSinceLastEnemySpawn = 1000;
+    private static List<Entity> entities = new ArrayList<>();
 
     // Display
-    private GamePanel gamePanel = new GamePanel(this);
+    private final GamePanel gamePanel = new GamePanel(this);
 
     // Main Game-Loop
     public MainFrame(){
@@ -48,13 +53,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
         setVisible(true);
 
-        // Add entities
-        entities.add(new Enemy(100, 2.0f, new Transform2D(250,250)));
-
         //
         // Main Game-Loop (60 FPS)
         //
-
         long startTime = System.currentTimeMillis();
         int deltaTime = 16;
         Timer timer = new Timer(deltaTime, e -> {
@@ -63,14 +64,19 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Spawn stuff
             if (timeSinceLastEnemySpawn <= 0) {
-                this.entities.add(new Enemy(100, 2f, new Transform2D(250,250)));
+                entities.add(
+                        new Enemy(
+                                100, 2f,
+                                new Transform2D(250,250), new Collider2D(25,25)
+                        )
+                );
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
             }
             timeSinceLastEnemySpawn -= deltaTime;
 
             // Entities
-            for(Entity entity : this.entities){
-                entity.move(player.getTransform());
+            for(Entity entity : entities){
+                entity.move(player.getTransform(), this);
             }
 
             // Player Input
@@ -147,14 +153,14 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
 
     public Player getPlayer(){
-        return this.player;
+        return player;
     }
 
     public Transform2D getMouseTransform(){
-        return this.mouseTransform;
+        return mouseTransform;
     }
 
     public List<Entity> getEntities(){
-        return this.entities;
+        return entities;
     }
 }
