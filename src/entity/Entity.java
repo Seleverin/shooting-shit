@@ -21,6 +21,7 @@ public abstract class Entity {
 
     public abstract void move(Transform2D direction, MainFrame parentMainFrame);
 
+    public abstract void takeDamage(int dmg);
 
     public Transform2D getTransform(){
         return transform;

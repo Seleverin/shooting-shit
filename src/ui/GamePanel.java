@@ -1,5 +1,6 @@
 package ui;
 
+import entity.Enemy;
 import entity.Entity;
 import entity.Player;
 import util.Transform2D;
@@ -33,10 +34,10 @@ public class GamePanel extends JPanel {
         paintCursor(g2d);
         paintPlayer(g2d);
 
-        paintEntities(g2d);
+        paintEnemies(g2d);
 
         // Debug
-        paintHitboxes(g2d);
+//        paintHitboxes(g2d);
     }
 
 
@@ -66,15 +67,17 @@ public class GamePanel extends JPanel {
         );
     }
 
-    private void paintEntities(Graphics2D g2d){
+    private void paintEnemies(Graphics2D g2d){
         g2d.setColor(Color.RED);
 
         for(Entity entity : parentMainFrame.getEntities()){
-            g2d.fillRoundRect(
-                    (int)entity.getTransform().x, (int)entity.getTransform().y,
-                    20,20,
-                    100,100
-            );
+            if(entity.getClass() == Enemy.class){
+                g2d.fillRoundRect(
+                        (int)entity.getTransform().x, (int)entity.getTransform().y,
+                        20,20,
+                        100,100
+                );
+            }
         }
 
         g2d.setColor(Color.BLACK);

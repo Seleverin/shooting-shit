@@ -15,19 +15,22 @@ public class Collider2D {
     }
 
     public boolean isColliding(Transform2D self, Entity other){
-        double selfX = self.x + width;
-        double selfY = self.y + height;
+        double selfPosX = self.x + 10;
+        double selfPosY = self.y + 10;
 
         Transform2D otherTransform = other.getTransform();
         Collider2D otherCollider = other.getCollider();
 
-        double otherX = otherTransform.x + otherCollider.width;
-        double otherY = otherTransform.y + otherCollider.height;
-
-        if(self.x >= otherTransform.x){
-            System.out.println("vertical align!");
+        if(
+                selfPosX >= otherTransform.x &&
+                selfPosX <= otherTransform.x + otherCollider.width &&
+                selfPosY >= otherTransform.y &&
+                selfPosY <= otherTransform.y + otherCollider.height
+        ){
+            return true;
         }
-
-        return true;
+        else{
+            return false;
+        }
     }
 }

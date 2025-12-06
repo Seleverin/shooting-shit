@@ -17,4 +17,14 @@ public class Player extends Entity {
     public void move(Transform2D direction, MainFrame frame) {
 //        transform.addDirection(direction, movementSpeed);
     }
+
+    @Override
+    public void takeDamage(int dmg) {
+        if (health > 0){
+            health -= dmg;
+        }
+        else{
+            System.out.println("Player died");
+        }
+    }
 }

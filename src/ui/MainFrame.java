@@ -53,6 +53,8 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
         setVisible(true);
 
+        entities.add(player);
+
         //
         // Main Game-Loop (60 FPS)
         //
@@ -66,8 +68,8 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (timeSinceLastEnemySpawn <= 0) {
                 entities.add(
                         new Enemy(
-                                100, 2f,
-                                new Transform2D(250,250), new Collider2D(25,25)
+                                100, 20, 2f,
+                                new Transform2D(250,250), new Collider2D(20,20)
                         )
                 );
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
@@ -76,7 +78,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Entities
             for(Entity entity : entities){
-                entity.move(player.getTransform(), this);
+                if(entity.getClass() == Enemy.class){
+                    entity.move(player.getTransform(), this);
+                }
             }
 
             // Player Input
