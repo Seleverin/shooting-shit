@@ -13,10 +13,15 @@ public class Player extends Entity {
 
     private BufferedImage activeSprite;
 
+    private final int hitCooldown = 1000;
+    private long lastHitTime;
+
     public Player(){}
 
     public Player(int health, float moveSpeed, Transform2D transform, Collider2D collider) {
         super(health, moveSpeed, transform, collider);
+
+        lastHitTime = System.currentTimeMillis();
     }
 
     @Override
@@ -26,11 +31,15 @@ public class Player extends Entity {
 
     @Override
     public void takeDamage(int dmg) {
-        if (health > 0){
-            health -= dmg;
-        }
-        else{
-            System.out.println("Player died");
+        if(System.currentTimeMillis() >= lastHitTime + hitCooldown){
+            if (health > 0){
+                health -= dmg;
+                System.out.println("Player got hit");
+            }
+            else{
+                System.out.println("Player died");
+            }
+            lastHitTime = System.currentTimeMillis();
         }
     }
 

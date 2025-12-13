@@ -88,6 +88,12 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (left) player.getTransform().x -= (int) player.getMovementSpeed();
             if (right) player.getTransform().x += (int) player.getMovementSpeed();
 
+            // Set sprites horizontally & vertically
+            if(up) player.setActiveSprite("/assets/player/up.png");
+            if(down) player.setActiveSprite("/assets/player/down.png");
+            if(right) player.setActiveSprite("/assets/player/right.png");
+            if(left) player.setActiveSprite("/assets/player/left.png");
+
             // Set sprites diagonally
             if(up && right) player.setActiveSprite("/assets/player/right-up.png");
             if(up && left) player.setActiveSprite("/assets/player/left-up.png");
@@ -110,22 +116,10 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
-            case KeyEvent.VK_W:
-                up = true;
-                player.setActiveSprite("/assets/player/up.png");
-                break;
-            case KeyEvent.VK_S:
-                down = true;
-                player.setActiveSprite("/assets/player/down.png");
-                break;
-            case KeyEvent.VK_A:
-                left = true;
-                player.setActiveSprite("/assets/player/left.png");
-                break;
-            case KeyEvent.VK_D:
-                right = true;
-                player.setActiveSprite("/assets/player/right.png");
-                break;
+            case KeyEvent.VK_W -> up = true;
+            case KeyEvent.VK_S -> down = true;
+            case KeyEvent.VK_A -> left = true;
+            case KeyEvent.VK_D -> right = true;
         }
     }
 
