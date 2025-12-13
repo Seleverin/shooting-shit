@@ -1,9 +1,6 @@
-package util;
+package libs.util;
 
-import entity.Entity;
-
-import java.awt.*;
-import java.awt.geom.Dimension2D;
+import libs.entity.Entity;
 
 public class Collider2D {
     public double width;
@@ -15,8 +12,8 @@ public class Collider2D {
     }
 
     public boolean isColliding(Transform2D self, Entity other){
-        double selfPosX = self.x + 10;
-        double selfPosY = self.y + 10;
+        double selfPosX = self.x + 20;
+        double selfPosY = self.y + 20;
 
         Transform2D otherTransform = other.getTransform();
         Collider2D otherCollider = other.getCollider();

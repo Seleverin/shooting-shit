@@ -1,8 +1,8 @@
-package entity;
+package libs.entity;
 
-import ui.MainFrame;
-import util.Collider2D;
-import util.Transform2D;
+import libs.ui.MainFrame;
+import libs.util.Collider2D;
+import libs.util.Transform2D;
 
 public abstract class Entity {
     protected int health;

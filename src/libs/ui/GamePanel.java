@@ -1,13 +1,16 @@
-package ui;
+package libs.ui;
 
-import entity.Enemy;
-import entity.Entity;
-import entity.Player;
-import util.Transform2D;
+import libs.entity.Enemy;
+import libs.entity.Entity;
+import libs.entity.Player;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.util.List;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.Objects;
 
 //
 // Class for displaying the game on screen according to data given by the MainFrame-Class
@@ -17,19 +20,27 @@ public class GamePanel extends JPanel {
     private MainFrame parentMainFrame;
 
     private Player player;
+    private final int entityScale = 40;
 
     public GamePanel(){}
 
     public GamePanel(MainFrame mainFrame){
         this.parentMainFrame = mainFrame;
         this.player = mainFrame.getPlayer();
+
+        // load Sprites
+//        try {
+//            sprite_player = ImageIO.read(
+//                    Objects.requireNonNull(getClass().getResource("/assets/player/right-down.png"))
+//            );
+//        } catch (IOException e) {
+//            throw new RuntimeException("Image not found ", e);
+//        }
     }
 
     public void paint(Graphics g){
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
-
-        g2d.fillRect(10,10,100,100);
 
         paintCursor(g2d);
         paintPlayer(g2d);
@@ -45,10 +56,10 @@ public class GamePanel extends JPanel {
     private void paintPlayer(Graphics2D g2d){
         g2d.setColor(Color.ORANGE);
 
-        g2d.fillRoundRect(
+        g2d.drawImage(
+                player.getActiveSprite(),
                 (int)player.getTransform().x,(int)player.getTransform().y,
-                20,20,
-                100,100
+                entityScale,entityScale,null
         );
 
         g2d.setColor(Color.BLACK);
@@ -62,7 +73,7 @@ public class GamePanel extends JPanel {
         g2d.drawRoundRect((int)parentMainFrame.getMouseTransform().x, (int)parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
 
         g2d.drawLine(
-                (int)player.getTransform().x + 10, (int)player.getTransform().y + 10,
+                (int)player.getTransform().x + entityScale/2, (int)player.getTransform().y + entityScale/2,
                 (int)parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, (int)parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
         );
     }

@@ -1,15 +1,14 @@
-package ui;
+package libs.ui;
 
-import entity.Enemy;
-import entity.Entity;
-import entity.Player;
-import util.Collider2D;
-import util.Transform2D;
+import libs.entity.Enemy;
+import libs.entity.Entity;
+import libs.entity.Player;
+import libs.util.Collider2D;
+import libs.util.Transform2D;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.geom.Dimension2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,6 +88,12 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (left) player.getTransform().x -= (int) player.getMovementSpeed();
             if (right) player.getTransform().x += (int) player.getMovementSpeed();
 
+            // Set sprites diagonally
+            if(up && right) player.setActiveSprite("/assets/player/right-up.png");
+            if(up && left) player.setActiveSprite("/assets/player/left-up.png");
+            if(down && right) player.setActiveSprite("/assets/player/right-down.png");
+            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
+
             // Display
             gamePanel.repaint();
         });
@@ -105,10 +110,22 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     @Override
     public void keyPressed(KeyEvent keyEvent) {
         switch (keyEvent.getKeyCode()) {
-            case KeyEvent.VK_W -> up = true;
-            case KeyEvent.VK_S -> down = true;
-            case KeyEvent.VK_A -> left = true;
-            case KeyEvent.VK_D -> right = true;
+            case KeyEvent.VK_W:
+                up = true;
+                player.setActiveSprite("/assets/player/up.png");
+                break;
+            case KeyEvent.VK_S:
+                down = true;
+                player.setActiveSprite("/assets/player/down.png");
+                break;
+            case KeyEvent.VK_A:
+                left = true;
+                player.setActiveSprite("/assets/player/left.png");
+                break;
+            case KeyEvent.VK_D:
+                right = true;
+                player.setActiveSprite("/assets/player/right.png");
+                break;
         }
     }
 
