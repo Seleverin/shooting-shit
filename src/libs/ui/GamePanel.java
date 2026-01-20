@@ -49,7 +49,7 @@ public class GamePanel extends JPanel {
         paintEntities(g2d);
 
         // Debug
-//        paintHitboxes(g2d);
+        paintHitboxes(g2d);
     }
 
 

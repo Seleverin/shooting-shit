@@ -23,7 +23,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             new Transform2D(10,10), new Collider2D(25,25)
     );
     private Transform2D mouseTransform = new Transform2D();
-    private boolean up, down, left, right;
+    private boolean up, down, left, right, shooting;
 
     // Entities
     private final int enemySpawnCooldown = 10000;
@@ -89,6 +89,8 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (left) player.getTransform().x -= (int) player.getMovementSpeed();
             if (right) player.getTransform().x += (int) player.getMovementSpeed();
 
+            if (shooting) player.shoot(mouseTransform, entities);
+
             // Set sprites horizontally & vertically
 //            if(up) player.setActiveSprite("/assets/player/up.png");
 //            if(down) player.setActiveSprite("/assets/player/down.png");
@@ -142,11 +144,13 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        player.shoot(mouseTransform, entities);
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1) shooting = true;
     }
 
     @Override
-    public void mouseReleased(MouseEvent mouseEvent) {}
+    public void mouseReleased(MouseEvent mouseEvent) {
+        if (mouseEvent.getButton() == MouseEvent.BUTTON1) shooting = false;
+    }
 
     @Override
     public void mouseEntered(MouseEvent mouseEvent) {}

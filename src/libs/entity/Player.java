@@ -45,15 +45,22 @@ public class Player extends Entity {
     }
 
     public void shoot(Transform2D targetPos, List<Entity> entities){
-        Transform2D lookingDir = new Transform2D(targetPos.x - transform.x, targetPos.y - transform.y);
+        int bulletSpread = (int) (Math.sqrt(
+                Math.pow(targetPos.x - transform.x, 2) + Math.pow(targetPos.y - transform.y, 2)
+        ) / 10);
+
+        int xSpread = (int)Math.floor(Math.random() * bulletSpread/2 - Math.random() * bulletSpread + bulletSpread);
+        int ySpread = (int)Math.floor(Math.random() * bulletSpread/2 - Math.random() * bulletSpread + bulletSpread);
+
+        Transform2D lookingDir = new Transform2D(targetPos.x - transform.x + xSpread, targetPos.y - transform.y + ySpread);
 
         float vectorLength = (float) Math.sqrt(lookingDir.x*lookingDir.x + lookingDir.y*lookingDir.y);
 
         lookingDir.x /= vectorLength; lookingDir.y /= vectorLength;
 
         Transform2D spawnPos = new Transform2D(
-                transform.x + lookingDir.x * 10,
-                transform.y + lookingDir.y * 10
+                transform.x + lookingDir.x * 10 + 10,
+                transform.y + lookingDir.y * 10 + 10
         );
 
         entities.add(new Projectile(

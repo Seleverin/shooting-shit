@@ -8,25 +8,31 @@ public class Projectile extends Entity {
 
     public Transform2D direction;
 
+    // Destroy timer
+    private long timeToDestroy;
+
     public Projectile(int health, int attackDmg, float moveSpeed, Transform2D transform, Collider2D collider, Transform2D direction) {
         super(health, moveSpeed, transform, collider);
 
         this.direction = direction;
+        this.timeToDestroy = System.currentTimeMillis() + 10000; // Destroy after 10 secs
     }
 
     @Override
     public void move(Transform2D direction, MainFrame parentMainFrame) {
 
-        direction = this.direction;
+        if (timeToDestroy >= System.currentTimeMillis()){
+            direction = this.direction;
 
-        float vectorLength = (float) Math.sqrt(direction.x*direction.x + direction.y*direction.y);
+            float vectorLength = (float) Math.sqrt(direction.x*direction.x + direction.y*direction.y);
 
-        Transform2D dirNormalized = new Transform2D(
-            direction.x / vectorLength, direction.y / vectorLength
-        );
+            Transform2D dirNormalized = new Transform2D(
+                    direction.x / vectorLength, direction.y / vectorLength
+            );
 
-        transform.x += direction.x * movementSpeed;
-        transform.y += direction.y * movementSpeed;
+            transform.x += direction.x * movementSpeed;
+            transform.y += direction.y * movementSpeed;
+        }
     }
 
     @Override
