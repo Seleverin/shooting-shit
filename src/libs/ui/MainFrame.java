@@ -3,6 +3,7 @@ package libs.ui;
 import libs.entity.Enemy;
 import libs.entity.Entity;
 import libs.entity.Player;
+import libs.entity.Projectile;
 import libs.util.Collider2D;
 import libs.util.Transform2D;
 
@@ -77,7 +78,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Entities
             for(Entity entity : entities){
-                if(entity.getClass() == Enemy.class){
+                if(entity.getClass() == Enemy.class || entity.getClass() == Projectile.class){
                     entity.move(player.getTransform(), this);
                 }
             }
@@ -89,16 +90,16 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (right) player.getTransform().x += (int) player.getMovementSpeed();
 
             // Set sprites horizontally & vertically
-            if(up) player.setActiveSprite("/assets/player/up.png");
-            if(down) player.setActiveSprite("/assets/player/down.png");
-            if(right) player.setActiveSprite("/assets/player/right.png");
-            if(left) player.setActiveSprite("/assets/player/left.png");
-
-            // Set sprites diagonally
-            if(up && right) player.setActiveSprite("/assets/player/right-up.png");
-            if(up && left) player.setActiveSprite("/assets/player/left-up.png");
-            if(down && right) player.setActiveSprite("/assets/player/right-down.png");
-            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
+//            if(up) player.setActiveSprite("/assets/player/up.png");
+//            if(down) player.setActiveSprite("/assets/player/down.png");
+//            if(right) player.setActiveSprite("/assets/player/right.png");
+//            if(left) player.setActiveSprite("/assets/player/left.png");
+//
+//            // Set sprites diagonally
+//            if(up && right) player.setActiveSprite("/assets/player/right-up.png");
+//            if(up && left) player.setActiveSprite("/assets/player/left-up.png");
+//            if(down && right) player.setActiveSprite("/assets/player/right-down.png");
+//            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
 
             // Display
             gamePanel.repaint();
@@ -140,7 +141,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     public void mouseClicked(MouseEvent mouseEvent) {}
 
     @Override
-    public void mousePressed(MouseEvent mouseEvent) {}
+    public void mousePressed(MouseEvent mouseEvent) {
+        player.shoot(mouseTransform, entities);
+    }
 
     @Override
     public void mouseReleased(MouseEvent mouseEvent) {}

@@ -3,6 +3,7 @@ package libs.ui;
 import libs.entity.Enemy;
 import libs.entity.Entity;
 import libs.entity.Player;
+import libs.entity.Projectile;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -20,7 +21,7 @@ public class GamePanel extends JPanel {
     private MainFrame parentMainFrame;
 
     private Player player;
-    private final int entityScale = 40;
+    private final int entityScale = 20;
 
     public GamePanel(){}
 
@@ -45,7 +46,7 @@ public class GamePanel extends JPanel {
         paintCursor(g2d);
         paintPlayer(g2d);
 
-        paintEnemies(g2d);
+        paintEntities(g2d);
 
         // Debug
 //        paintHitboxes(g2d);
@@ -56,10 +57,15 @@ public class GamePanel extends JPanel {
     private void paintPlayer(Graphics2D g2d){
         g2d.setColor(Color.ORANGE);
 
-        g2d.drawImage(
-                player.getActiveSprite(),
-                (int)player.getTransform().x,(int)player.getTransform().y,
-                entityScale,entityScale,null
+//        g2d.drawImage(
+//                player.getActiveSprite(),
+//                (int)player.getTransform().x,(int)player.getTransform().y,
+//                entityScale,entityScale,null
+//        );
+        g2d.fillRoundRect(
+                (int)player.getTransform().x, (int)player.getTransform().y,
+                20,20,
+                100,100
         );
 
         g2d.setColor(Color.BLACK);
@@ -78,15 +84,24 @@ public class GamePanel extends JPanel {
         );
     }
 
-    private void paintEnemies(Graphics2D g2d){
+    private void paintEntities(Graphics2D g2d){
         g2d.setColor(Color.RED);
 
         for(Entity entity : parentMainFrame.getEntities()){
+            // Enemies
             if(entity.getClass() == Enemy.class){
                 g2d.fillRoundRect(
                         (int)entity.getTransform().x, (int)entity.getTransform().y,
                         20,20,
                         100,100
+                );
+            }
+            // Projectiles
+            else if(entity.getClass() == Projectile.class){
+                g2d.fillRoundRect(
+                        (int)entity.getTransform().x, (int)entity.getTransform().y,
+                        5,5,
+                        500,500
                 );
             }
         }

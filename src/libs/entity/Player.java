@@ -7,6 +7,7 @@ import libs.util.Transform2D;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 public class Player extends Entity {
@@ -43,16 +44,37 @@ public class Player extends Entity {
         }
     }
 
-    public void setActiveSprite(String src){
-        try {
-            this.activeSprite = ImageIO.read(
-                    Objects.requireNonNull(getClass().getResource(src))
-            );
-        }
-        catch (IOException e) {
-            throw new RuntimeException("Sprite not found for Player ", e);
-        }
+    public void shoot(Transform2D targetPos, List<Entity> entities){
+        Transform2D lookingDir = new Transform2D(targetPos.x - transform.x, targetPos.y - transform.y);
+
+        float vectorLength = (float) Math.sqrt(lookingDir.x*lookingDir.x + lookingDir.y*lookingDir.y);
+
+        lookingDir.x /= vectorLength; lookingDir.y /= vectorLength;
+
+        Transform2D spawnPos = new Transform2D(
+                transform.x + lookingDir.x * 10,
+                transform.y + lookingDir.y * 10
+        );
+
+        entities.add(new Projectile(
+                        1, 10, 5f,
+                        spawnPos,
+                        new Collider2D(5,5, true),
+                        lookingDir
+                )
+        );
     }
+
+//    public void setActiveSprite(String src){
+//        try {
+//            this.activeSprite = ImageIO.read(
+//                    Objects.requireNonNull(getClass().getResource(src))
+//            );
+//        }
+//        catch (IOException e) {
+//            throw new RuntimeException("Sprite not found for Player ", e);
+//        }
+//    }
 
     public BufferedImage getActiveSprite(){ return activeSprite; }
 }
