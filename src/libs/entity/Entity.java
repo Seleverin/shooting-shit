@@ -5,6 +5,7 @@ import libs.util.Collider2D;
 import libs.util.Transform2D;
 
 public abstract class Entity {
+    public boolean isDead;
     protected int health;
     protected float movementSpeed;
     protected Transform2D transform;
@@ -17,6 +18,7 @@ public abstract class Entity {
         this.movementSpeed = movementSpeed;
         this.transform = transform;
         this.collider = collider;
+        this.isDead = false;
     }
 
     public abstract void move(Transform2D direction, MainFrame parentMainFrame);

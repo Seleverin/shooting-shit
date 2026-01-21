@@ -19,14 +19,14 @@ import java.util.List;
 public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
     // Player
     private Player player = new Player(
-            100, 3f,
-            new Transform2D(10,10), new Collider2D(25,25)
+            100, 3f, 5,
+            new Transform2D(10,10), new Collider2D(20,20)
     );
     private Transform2D mouseTransform = new Transform2D();
     private boolean up, down, left, right, shooting;
 
     // Entities
-    private final int enemySpawnCooldown = 10000;
+    private int enemySpawnCooldown = 8000;
     private int timeSinceLastEnemySpawn = 1000;
     private static List<Entity> entities = new ArrayList<>();
 
@@ -61,6 +61,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         long startTime = System.currentTimeMillis();
         int deltaTime = 16;
         Timer timer = new Timer(deltaTime, e -> {
+            // Close game when player dies
+            if (player.isDead) return;
+
             // Get time
             long elapsedTime = System.currentTimeMillis() - startTime;
 
@@ -68,18 +71,25 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (timeSinceLastEnemySpawn <= 0) {
                 entities.add(
                         new Enemy(
-                                100, 20, 2f,
+                                100, 2f, 15,
                                 new Transform2D(250,250), new Collider2D(20,20)
                         )
                 );
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
+
+                // Crank up enemy spawns
+                enemySpawnCooldown = (int) (enemySpawnCooldown * .9 + 1000);
+                System.out.println(enemySpawnCooldown);
             }
             timeSinceLastEnemySpawn -= deltaTime;
 
             // Entities
+            List<Entity> entities2Destroy = new ArrayList<>();
             for(Entity entity : entities){
-                if(entity.getClass() == Enemy.class || entity.getClass() == Projectile.class){
+                if(entity.getClass() != Player.class && !entity.isDead){
                     entity.move(player.getTransform(), this);
+                }else if(entity.isDead){
+                    entities2Destroy.add(entity);
                 }
             }
 
@@ -102,6 +112,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 //            if(up && left) player.setActiveSprite("/assets/player/left-up.png");
 //            if(down && right) player.setActiveSprite("/assets/player/right-down.png");
 //            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
+
+            // Destroy dead entities
+            destroyEntites(entities2Destroy);
 
             // Display
             gamePanel.repaint();
@@ -184,5 +197,11 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     public List<Entity> getEntities(){
         return entities;
+    }
+
+    private void destroyEntites(List<Entity> entities){
+        for (Entity e : entities){
+            this.entities.remove(e);
+        }
     }
 }

@@ -5,12 +5,12 @@ import libs.util.Collider2D;
 import libs.util.Transform2D;
 
 public class Enemy extends Entity {
-    public int attackDmg;
+    public int attackDamage;
 
-    public Enemy(int health, int attackDmg, float moveSpeed, Transform2D transform, Collider2D collider) {
+    public Enemy(int health, float moveSpeed, int attackDamage, Transform2D transform, Collider2D collider) {
         super(health, moveSpeed, transform, collider);
 
-        this.attackDmg = attackDmg;
+        this.attackDamage = attackDamage;
     }
 
     @Override
@@ -30,10 +30,10 @@ public class Enemy extends Entity {
 
         for(Entity entity : frame.getEntities()){
             if(entity != this){
-                if(collider.isColliding(new Transform2D(fx,fy), entity)){
+                if(collider.isColliding(new Transform2D(fx,fy), entity) && entity.getClass() != Projectile.class){
                     fx = transform.x; fy = transform.y;
                     if(entity.getClass() == Player.class){
-                        entity.takeDamage(attackDmg);
+                        entity.takeDamage(attackDamage);
                     }
                 }
             }
@@ -45,7 +45,10 @@ public class Enemy extends Entity {
 
     @Override
     public void takeDamage(int dmg) {
-
+        health -= dmg;
+        if (health < 0){
+            isDead = true;
+        }
     }
 
 

@@ -20,22 +20,28 @@ public class Collider2D {
     }
 
     public boolean isColliding(Transform2D self, Entity other){
-        double selfPosX = self.x + 20;
-        double selfPosY = self.y + 20;
 
         Transform2D otherTransform = other.getTransform();
         Collider2D otherCollider = other.getCollider();
 
-        if(
-                selfPosX >= otherTransform.x &&
-                selfPosX <= otherTransform.x + otherCollider.width &&
-                selfPosY >= otherTransform.y &&
-                selfPosY <= otherTransform.y + otherCollider.height
-        ){
-            return true;
-        }
-        else{
+        double leftA   = self.x;
+        double rightA  = self.x + 20;
+        double topA    = self.y;
+        double bottomA = self.y + 20;
+
+        double leftB   = otherTransform.x;
+        double rightB  = otherTransform.x + otherCollider.width;
+        double topB    = otherTransform.y;
+        double bottomB = otherTransform.y + otherCollider.height;
+
+        if (rightA <= leftB ||
+                leftA >= rightB ||
+                bottomA <= topB ||
+                topA >= bottomB) {
             return false;
         }
+
+        return true;
     }
+
 }
