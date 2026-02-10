@@ -48,14 +48,31 @@ public class GamePanel extends JPanel {
 
         paintEntities(g2d);
 
+        paintHealthbar(g2d);
+
         // Debug
 //        paintHitboxes(g2d);
     }
 
 
+    private void paintHealthbar(Graphics2D g2d){
+        // Background
+        g2d.setColor(Color.darkGray);
+        g2d.fillRect(
+                (int)player.getTransform().x, (int)(player.getTransform().y - player.getCollider().height * 0.35),
+                (int)player.getCollider().width,6
+        );
+        // Fill
+        g2d.setColor(Color.red);
+        g2d.fillRect(
+                (int)player.getTransform().x, (int)(player.getTransform().y - player.getCollider().height * 0.35),
+                (int)(player.getHealth() / (player.getMaxHealth() / player.getCollider().width)),6
+        );
+        g2d.setColor(Color.BLACK);
+    }
 
     private void paintPlayer(Graphics2D g2d){
-        g2d.setColor(Color.ORANGE);
+        g2d.setColor(new Color(83, 88, 219));
 
 //        g2d.drawImage(
 //                player.getActiveSprite(),
@@ -85,23 +102,29 @@ public class GamePanel extends JPanel {
     }
 
     private void paintEntities(Graphics2D g2d){
-        g2d.setColor(Color.RED);
-
         for(Entity entity : parentMainFrame.getEntities()){
             // Enemies
             if(entity.getClass() == Enemy.class){
-                g2d.fillRoundRect(
-                        (int)entity.getTransform().x, (int)entity.getTransform().y,
-                        20,20,
-                        100,100
-                );
+                int green = (int)(180 * (entity.getHealth() * 0.01));
+                if (green > 225) green = 225;
+
+                if (green > 0){
+                    g2d.setColor(new Color(240, green, 24));
+                    g2d.fillRoundRect(
+                            (int)entity.getTransform().x, (int)entity.getTransform().y,
+                            (int)entity.getCollider().width,(int)entity.getCollider().height,
+                            100,100
+                    );
+                }
             }
             // Projectiles
             else if(entity.getClass() == Projectile.class){
+                int bulletColor = (int)(Math.floor(Math.random() * 200));
+                g2d.setColor(new Color(bulletColor, bulletColor, bulletColor));
                 g2d.fillRoundRect(
                         (int)entity.getTransform().x, (int)entity.getTransform().y,
-                        5,5,
-                        500,500
+                        (int)entity.getCollider().width,(int)entity.getCollider().height,
+                        100,100
                 );
             }
         }

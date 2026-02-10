@@ -38,9 +38,6 @@ public class Projectile extends Entity {
                 direction.x / vectorLength, direction.y / vectorLength
         );
 
-        transform.x += direction.x * movementSpeed;
-        transform.y += direction.y * movementSpeed;
-
         for(Entity entity : parentMainFrame.getEntities()){
             if(entity != this && collider.isColliding(transform,entity) && entity.getClass() != Player.class && entity.getClass() != Projectile.class){
                 entity.takeDamage(attackDamage);
@@ -48,6 +45,9 @@ public class Projectile extends Entity {
                 break;
             }
         }
+
+        transform.x += direction.x * movementSpeed;
+        transform.y += direction.y * movementSpeed;
     }
 
     @Override

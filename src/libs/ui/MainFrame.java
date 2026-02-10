@@ -26,7 +26,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     private boolean up, down, left, right, shooting;
 
     // Entities
-    private int enemySpawnCooldown = 8000;
+    private int enemySpawnCooldown = 5000;
     private int timeSinceLastEnemySpawn = 1000;
     private static List<Entity> entities = new ArrayList<>();
 
@@ -69,17 +69,24 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Spawn stuff
             if (timeSinceLastEnemySpawn <= 0) {
+                float scale = (float)(Math.random() + 0.45);
+//                entities.add(
+//                        new Enemy(
+//                                (int)(100 * scale), 2f / scale, (int)(30 * scale),
+//                                new Transform2D(250,250), new Collider2D((int)(30 * scale),(int)(30 * scale))
+//                        )
+//                );
                 entities.add(
                         new Enemy(
-                                100, 2f, 15,
-                                new Transform2D(250,250), new Collider2D(20,20)
+                                (int)(500 * scale), 2f / scale, (int)(45 * scale),
+                                new Transform2D(250,250), new Collider2D((int)(60 * scale),(int)(60 * scale))
                         )
                 );
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
 
                 // Crank up enemy spawns
-                enemySpawnCooldown = (int) (enemySpawnCooldown * .9 + 1000);
-                System.out.println(enemySpawnCooldown);
+                enemySpawnCooldown = (int) (enemySpawnCooldown * .65 + 750);
+//                System.out.println(enemySpawnCooldown);
             }
             timeSinceLastEnemySpawn -= deltaTime;
 
@@ -88,7 +95,8 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             for(Entity entity : entities){
                 if(entity.getClass() != Player.class && !entity.isDead){
                     entity.move(player.getTransform(), this);
-                }else if(entity.isDead){
+                }
+                else if(entity.isDead){
                     entities2Destroy.add(entity);
                 }
             }

@@ -63,8 +63,6 @@ public class Player extends Entity {
         int xSpread = (int)(Math.floor(Math.random() * bulletSpread) - (double) bulletSpread / 2);
         int ySpread = (int)(Math.floor(Math.random() * bulletSpread) - (double) bulletSpread / 2);
 
-        System.out.println(xSpread + " | " + ySpread);
-
         Transform2D lookingDir = new Transform2D(targetPos.x - transform.x + xSpread, targetPos.y - transform.y + ySpread);
 
         float vectorLength = (float) Math.sqrt(lookingDir.x*lookingDir.x + lookingDir.y*lookingDir.y);

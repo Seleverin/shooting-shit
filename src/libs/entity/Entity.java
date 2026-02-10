@@ -7,6 +7,7 @@ import libs.util.Transform2D;
 public abstract class Entity {
     public boolean isDead;
     protected int health;
+    protected int maxHealth;
     protected float movementSpeed;
     protected Transform2D transform;
     protected Collider2D collider;
@@ -19,6 +20,7 @@ public abstract class Entity {
         this.transform = transform;
         this.collider = collider;
         this.isDead = false;
+        this.maxHealth = health;
     }
 
     public abstract void move(Transform2D direction, MainFrame parentMainFrame);
@@ -33,5 +35,13 @@ public abstract class Entity {
 
     public Collider2D getCollider(){
         return collider;
+    }
+
+    public int getHealth(){
+        return health;
+    }
+
+    public int getMaxHealth(){
+        return maxHealth;
     }
 }
