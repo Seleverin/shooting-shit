@@ -4,6 +4,7 @@ import libs.entity.Enemy;
 import libs.entity.Entity;
 import libs.entity.Player;
 import libs.entity.Projectile;
+import libs.entity.item.HealthItem;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -43,10 +44,10 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
 
+        paintEntities(g2d);
+
         paintCursor(g2d);
         paintPlayer(g2d);
-
-        paintEntities(g2d);
 
         paintHealthbar(g2d);
 
@@ -119,8 +120,18 @@ public class GamePanel extends JPanel {
             }
             // Projectiles
             else if(entity.getClass() == Projectile.class){
-                int bulletColor = (int)(Math.floor(Math.random() * 200));
-                g2d.setColor(new Color(bulletColor, bulletColor, bulletColor));
+//                int bulletColor = (int)(Math.floor(Math.random() * 200));
+                g2d.setColor(new Color(50, 50, 50));
+                g2d.fillRoundRect(
+                        (int)entity.getTransform().x, (int)entity.getTransform().y,
+                        (int)entity.getCollider().width,(int)entity.getCollider().height,
+                        100,100
+                );
+            }
+            // Items
+            else if(entity.getClass() == HealthItem.class){
+//                int bulletColor = (int)(Math.floor(Math.random() * 200));
+                g2d.setColor(new Color(34, 199, 39));
                 g2d.fillRoundRect(
                         (int)entity.getTransform().x, (int)entity.getTransform().y,
                         (int)entity.getCollider().width,(int)entity.getCollider().height,

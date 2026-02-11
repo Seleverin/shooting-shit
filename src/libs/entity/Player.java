@@ -13,21 +13,27 @@ import java.util.Objects;
 public class Player extends Entity {
 
     public int attackDamage;
+    public int bulletAmount;
+    public float bulletSpread;
 
     private BufferedImage activeSprite;
 
-    private final int hitCooldown = 1000;
+    private final int hitCooldown = 750;
     private long lastHitTime;
 
-    private final int shootCooldown = 75;
+    public int shootCooldown;
     private long lastShootTime;
 
     public Player(){}
 
-    public Player(int health, float moveSpeed, int attackDamage, Transform2D transform, Collider2D collider) {
+    public Player(int health, float moveSpeed, Transform2D transform, Collider2D collider) {
         super(health, moveSpeed, transform, collider);
 
-        this.attackDamage = attackDamage;
+        // Default values
+        this.bulletAmount = 5;
+        this.shootCooldown = 1;
+        this.attackDamage = 5;
+        this.bulletSpread = 0.75f;
 
         lastHitTime = System.currentTimeMillis();
         lastShootTime = System.currentTimeMillis();
@@ -43,8 +49,9 @@ public class Player extends Entity {
         if(System.currentTimeMillis() < lastHitTime + hitCooldown) return;
         lastHitTime = System.currentTimeMillis();
 
+        health -= dmg;
+
         if (health > 0){
-            health -= dmg;
             System.out.println(health);
         }
         else {
@@ -56,31 +63,32 @@ public class Player extends Entity {
         if(System.currentTimeMillis() < lastShootTime + shootCooldown) return;
         lastShootTime = System.currentTimeMillis();
 
-        int bulletSpread = (int) (Math.sqrt(
-                Math.pow(targetPos.x - transform.x, 2) + Math.pow(targetPos.y - transform.y, 2)
-        ) / 10);
+        for (int b = 0; b<bulletAmount; b++){
+            int spread = (int) (Math.sqrt(
+                    Math.pow(targetPos.x - transform.x, 2) + Math.pow(targetPos.y - transform.y, 2)
+            ) * bulletSpread);
 
-        int xSpread = (int)(Math.floor(Math.random() * bulletSpread) - (double) bulletSpread / 2);
-        int ySpread = (int)(Math.floor(Math.random() * bulletSpread) - (double) bulletSpread / 2);
+            int xSpread = (int)(Math.floor(Math.random() * spread) - (double) spread / 2);
+            int ySpread = (int)(Math.floor(Math.random() * spread) - (double) spread / 2);
 
-        Transform2D lookingDir = new Transform2D(targetPos.x - transform.x + xSpread, targetPos.y - transform.y + ySpread);
+            Transform2D lookingDir = new Transform2D(targetPos.x - transform.x + xSpread, targetPos.y - transform.y + ySpread);
 
-        float vectorLength = (float) Math.sqrt(lookingDir.x*lookingDir.x + lookingDir.y*lookingDir.y);
+            float vectorLength = (float) Math.sqrt(lookingDir.x*lookingDir.x + lookingDir.y*lookingDir.y);
 
-        lookingDir.x /= vectorLength; lookingDir.y /= vectorLength;
+            lookingDir.x /= vectorLength; lookingDir.y /= vectorLength;
 
-        Transform2D spawnPos = new Transform2D(
-                transform.x + lookingDir.x * 10 + 10,
-                transform.y + lookingDir.y * 10 + 10
-        );
-
-        entities.add(new Projectile(
-                        1, 5f, attackDamage,
-                        spawnPos,
-                        new Collider2D(5,5, true),
-                        lookingDir
-                )
-        );
+            Transform2D spawnPos = new Transform2D(
+                    transform.x + lookingDir.x * 10 + 10,
+                    transform.y + lookingDir.y * 10 + 10
+            );
+            entities.add(new Projectile(
+                            1, 5f, attackDamage,
+                            spawnPos,
+                            new Collider2D(5,5, true),
+                            lookingDir
+                    )
+            );
+        }
     }
 
 //    public void setActiveSprite(String src){

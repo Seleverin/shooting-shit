@@ -4,6 +4,7 @@ import libs.entity.Enemy;
 import libs.entity.Entity;
 import libs.entity.Player;
 import libs.entity.Projectile;
+import libs.entity.item.HealthItem;
 import libs.util.Collider2D;
 import libs.util.Transform2D;
 
@@ -19,16 +20,18 @@ import java.util.List;
 public class MainFrame extends JFrame implements KeyListener, MouseListener, MouseMotionListener {
     // Player
     private Player player = new Player(
-            100, 3f, 5,
+            100, 3f,
             new Transform2D(10,10), new Collider2D(20,20)
     );
     private Transform2D mouseTransform = new Transform2D();
     private boolean up, down, left, right, shooting;
 
     // Entities
-    private int enemySpawnCooldown = 5000;
-    private int timeSinceLastEnemySpawn = 1000;
+    private int enemySpawnCooldown = 8000;
+    private int minEnemySpawnCooldown = 750;
+    private int timeSinceLastEnemySpawn = 3000;
     private static List<Entity> entities = new ArrayList<>();
+    private List<Entity> entities2Add = new ArrayList<>();
 
     // Display
     private final GamePanel gamePanel = new GamePanel(this);
@@ -54,7 +57,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         setVisible(true);
 
         entities.add(player);
-
         //
         // Main Game-Loop (60 FPS)
         //
@@ -70,22 +72,22 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             // Spawn stuff
             if (timeSinceLastEnemySpawn <= 0) {
                 float scale = (float)(Math.random() + 0.45);
-//                entities.add(
-//                        new Enemy(
-//                                (int)(100 * scale), 2f / scale, (int)(30 * scale),
-//                                new Transform2D(250,250), new Collider2D((int)(30 * scale),(int)(30 * scale))
-//                        )
-//                );
                 entities.add(
                         new Enemy(
-                                (int)(500 * scale), 2f / scale, (int)(45 * scale),
-                                new Transform2D(250,250), new Collider2D((int)(60 * scale),(int)(60 * scale))
+                                (int)(100 * scale), 2f / scale, (int)(25 * scale),
+                                new Transform2D(250,250), new Collider2D((int)(30 * scale),(int)(30 * scale))
                         )
                 );
+//                entities.add(
+//                        new Enemy(
+//                                (int)(500 * scale), 2f / scale, (int)(45 * scale),
+//                                new Transform2D(250,250), new Collider2D((int)(60 * scale),(int)(60 * scale))
+//                        )
+//                );
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
 
                 // Crank up enemy spawns
-                enemySpawnCooldown = (int) (enemySpawnCooldown * .65 + 750);
+                enemySpawnCooldown = (int) (enemySpawnCooldown * .65 + minEnemySpawnCooldown);
 //                System.out.println(enemySpawnCooldown);
             }
             timeSinceLastEnemySpawn -= deltaTime;
@@ -123,6 +125,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Destroy dead entities
             destroyEntites(entities2Destroy);
+
+            // Add new entities
+            addEntities();
 
             // Display
             gamePanel.repaint();
@@ -208,8 +213,14 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     }
 
     private void destroyEntites(List<Entity> entities){
-        for (Entity e : entities){
-            this.entities.remove(e);
-        }
+        this.entities.removeAll(entities);
+    }
+
+    public void addEntity2AddingQueue(Entity entity){
+        this.entities2Add.add(entity);
+    }
+
+    private void addEntities(){
+        this.entities.addAll(entities2Add);
     }
 }

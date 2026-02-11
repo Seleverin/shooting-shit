@@ -39,7 +39,7 @@ public class Projectile extends Entity {
         );
 
         for(Entity entity : parentMainFrame.getEntities()){
-            if(entity != this && collider.isColliding(transform,entity) && entity.getClass() != Player.class && entity.getClass() != Projectile.class){
+            if(entity != this && collider.isColliding(transform,entity) && entity.getClass() == Enemy.class){
                 entity.takeDamage(attackDamage);
                 this.isDead = true;
                 break;

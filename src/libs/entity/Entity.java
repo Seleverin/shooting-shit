@@ -23,6 +23,11 @@ public abstract class Entity {
         this.maxHealth = health;
     }
 
+    public Entity(Transform2D transform, Collider2D collider) {
+        this.transform = transform;
+        this.collider = collider;
+    }
+
     public abstract void move(Transform2D direction, MainFrame parentMainFrame);
 
     public abstract void takeDamage(int dmg);
@@ -39,6 +44,10 @@ public abstract class Entity {
 
     public int getHealth(){
         return health;
+    }
+
+    public void setHealth(int health){
+        this.health = health;
     }
 
     public int getMaxHealth(){
