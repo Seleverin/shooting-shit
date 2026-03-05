@@ -21,7 +21,6 @@ public class HealthItem extends Item {
 
         if(player.getHealth() > player.getMaxHealth()){
             player.setHealth(player.getMaxHealth());
-            System.out.println("ttttt");
         }
 
         this.isDead = true;
