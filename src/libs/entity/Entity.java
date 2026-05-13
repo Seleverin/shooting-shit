@@ -53,4 +53,12 @@ public abstract class Entity {
     public int getMaxHealth(){
         return maxHealth;
     }
+
+    public void setMaxHealth(int maxHealth){
+        this.maxHealth = maxHealth;
+    }
+
+    public void setMovementSpeed(float movementSpeed){
+        this.movementSpeed = movementSpeed;
+    }
 }

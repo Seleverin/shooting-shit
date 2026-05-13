@@ -17,13 +17,17 @@ public class HealthItem extends Item {
 
     @Override
     public void activateAbility(Entity player){
-        player.setHealth(player.getHealth() + healthAmount);
+        if(player.getHealth() < player.getMaxHealth()){
+            player.setHealth(player.getHealth() + healthAmount);
 
-        if(player.getHealth() > player.getMaxHealth()){
-            player.setHealth(player.getMaxHealth());
-            System.out.println("ttttt");
+            if(player.getHealth() > player.getMaxHealth()){
+                player.setHealth(player.getMaxHealth());
+            }
+
+            this.isDead = true;
         }
-
-        this.isDead = true;
+        else{
+            player.setMaxHealth(player.getMaxHealth() + healthAmount / 2);
+        }
     }
 }

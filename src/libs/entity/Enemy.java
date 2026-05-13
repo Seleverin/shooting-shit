@@ -1,12 +1,26 @@
 package libs.entity;
 
 import libs.entity.item.HealthItem;
+import libs.entity.item.SpeedItem;
 import libs.ui.MainFrame;
 import libs.util.Collider2D;
 import libs.util.Transform2D;
 
 public class Enemy extends Entity {
     public int attackDamage;
+
+    private final Entity[] itemDrops = {
+            new HealthItem(
+                    (int)Math.floor(Math.random() * 25 + 25),
+                    transform,
+                    new Collider2D(15,15)
+            ),
+            new SpeedItem(
+                    (float)Math.floor(Math.random() * 1.2 + 1.05),
+                    transform,
+                    new Collider2D(15,15)
+            )
+    };
 
     private MainFrame mainFrame;
 
@@ -52,12 +66,10 @@ public class Enemy extends Entity {
     public void takeDamage(int dmg) {
         health -= dmg;
         if (health < 0 && !isDead){
+            Entity item = itemDrops[(int)(Math.random() * itemDrops.length)];
+            item.transform = transform;
             mainFrame.addEntity2AddingQueue(
-                    new HealthItem(
-                            10,
-                            transform,
-                            new Collider2D(10,10)
-                    )
+                    item
             );
 
             isDead = true;

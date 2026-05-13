@@ -21,7 +21,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     // Player
     private Player player = new Player(
             100, 3f,
-            new Transform2D(10,10), new Collider2D(20,20)
+            new Transform2D(15,15), new Collider2D(30,30)
     );
     private Transform2D mouseTransform = new Transform2D();
     private boolean up, down, left, right, shooting;
@@ -32,6 +32,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     private int timeSinceLastEnemySpawn = 3000;
     private static List<Entity> entities = new ArrayList<>();
     private List<Entity> entities2Add = new ArrayList<>();
+    private List<Entity> entities2Destroy = new ArrayList<>();
 
     // Display
     private final GamePanel gamePanel = new GamePanel(this);
@@ -93,7 +94,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             timeSinceLastEnemySpawn -= deltaTime;
 
             // Entities
-            List<Entity> entities2Destroy = new ArrayList<>();
             for(Entity entity : entities){
                 if(entity.getClass() != Player.class && !entity.isDead){
                     entity.move(player.getTransform(), this);
@@ -124,7 +124,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 //            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
 
             // Destroy dead entities
-            destroyEntites(entities2Destroy);
+            destroyEntites();
 
             // Add new entities
             addEntities();
@@ -212,8 +212,9 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         return entities;
     }
 
-    private void destroyEntites(List<Entity> entities){
-        this.entities.removeAll(entities);
+    private void destroyEntites(){
+        this.entities.removeAll(entities2Destroy);
+        entities2Destroy.clear();
     }
 
     public void addEntity2AddingQueue(Entity entity){
@@ -222,5 +223,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     private void addEntities(){
         this.entities.addAll(entities2Add);
+        entities2Add.clear();
     }
 }

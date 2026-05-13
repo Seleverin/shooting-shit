@@ -5,14 +5,10 @@ import libs.entity.Entity;
 import libs.entity.Player;
 import libs.entity.Projectile;
 import libs.entity.item.HealthItem;
+import libs.entity.item.SpeedItem;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.Objects;
 
 //
 // Class for displaying the game on screen according to data given by the MainFrame-Class
@@ -23,6 +19,11 @@ public class GamePanel extends JPanel {
 
     private Player player;
     private final int entityScale = 20;
+
+    private final Image healthItemSprite = new ImageIcon("src/assets/items/health_item.png").getImage();
+    private final Image speedItemSprite = new ImageIcon("src/assets/items/speed_upgrade_item.png").getImage();
+    private final Image playerSprite = new ImageIcon("src/assets/player/player.png").getImage();
+    private final Image commonEnemySprite = new ImageIcon("src/assets/enemy/common_enemy.png").getImage();
 
     public GamePanel(){}
 
@@ -73,20 +74,12 @@ public class GamePanel extends JPanel {
     }
 
     private void paintPlayer(Graphics2D g2d){
-        g2d.setColor(new Color(83, 88, 219));
-
-//        g2d.drawImage(
-//                player.getActiveSprite(),
-//                (int)player.getTransform().x,(int)player.getTransform().y,
-//                entityScale,entityScale,null
-//        );
-        g2d.fillRoundRect(
+        g2d.drawImage(
+                playerSprite,
                 (int)player.getTransform().x, (int)player.getTransform().y,
-                20,20,
-                100,100
+                (int)player.getCollider().width,(int)player.getCollider().height,
+                this
         );
-
-        g2d.setColor(Color.BLACK);
     }
 
     private void paintCursor(Graphics2D g2d){
@@ -106,17 +99,25 @@ public class GamePanel extends JPanel {
         for(Entity entity : parentMainFrame.getEntities()){
             // Enemies
             if(entity.getClass() == Enemy.class){
-                int green = (int)(180 * (entity.getHealth() * 0.01));
-                if (green > 225) green = 225;
+//                int green = (int)(180 * (entity.getHealth() * 0.01));
+//                if (green > 225) green = 225;
+//
+//                if (green > 0){
 
-                if (green > 0){
-                    g2d.setColor(new Color(240, green, 24));
-                    g2d.fillRoundRect(
+                    g2d.drawImage(
+                            commonEnemySprite,
                             (int)entity.getTransform().x, (int)entity.getTransform().y,
                             (int)entity.getCollider().width,(int)entity.getCollider().height,
-                            100,100
+                            this
                     );
-                }
+
+//                    g2d.setColor(new Color(240, green, 24, 200));
+//                    g2d.fillRoundRect(
+//                            (int)entity.getTransform().x, (int)entity.getTransform().y,
+//                            (int)entity.getCollider().width,(int)entity.getCollider().height,
+//                            100,100
+//                    );
+//                }
             }
             // Projectiles
             else if(entity.getClass() == Projectile.class){
@@ -130,12 +131,19 @@ public class GamePanel extends JPanel {
             }
             // Items
             else if(entity.getClass() == HealthItem.class){
-//                int bulletColor = (int)(Math.floor(Math.random() * 200));
-                g2d.setColor(new Color(34, 199, 39));
-                g2d.fillRoundRect(
+                g2d.drawImage(
+                        healthItemSprite,
                         (int)entity.getTransform().x, (int)entity.getTransform().y,
                         (int)entity.getCollider().width,(int)entity.getCollider().height,
-                        100,100
+                        this
+                );
+            }
+            else if(entity.getClass() == SpeedItem.class){
+                g2d.drawImage(
+                        speedItemSprite,
+                        (int)entity.getTransform().x, (int)entity.getTransform().y,
+                        (int)entity.getCollider().width,(int)entity.getCollider().height,
+                        this
                 );
             }
         }

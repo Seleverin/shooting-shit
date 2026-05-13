@@ -14,7 +14,6 @@ public abstract class Item extends Entity {
     @Override
     public void move(Transform2D direction, MainFrame parentMainFrame) {
         if (this.collider.isColliding(transform, parentMainFrame.getPlayer())){
-            System.out.println(" trset");
             activateAbility(parentMainFrame.getPlayer());
         }
     }
