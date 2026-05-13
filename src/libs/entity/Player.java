@@ -30,10 +30,10 @@ public class Player extends Entity {
         super(health, moveSpeed, transform, collider);
 
         // Default values
-        this.bulletAmount = 5;
-        this.shootCooldown = 1;
+        this.bulletAmount = 10;
+        this.shootCooldown = 500;
         this.attackDamage = 5;
-        this.bulletSpread = 0.75f;
+        this.bulletSpread = .5f;
 
         lastHitTime = System.currentTimeMillis();
         lastShootTime = System.currentTimeMillis();

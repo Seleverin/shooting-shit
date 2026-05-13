@@ -27,7 +27,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     private boolean up, down, left, right, shooting;
 
     // Entities
-    private int enemySpawnCooldown = 8000;
+    private int enemySpawnCooldown = 10000;
     private int minEnemySpawnCooldown = 750;
     private int timeSinceLastEnemySpawn = 3000;
     private static List<Entity> entities = new ArrayList<>();
@@ -88,7 +88,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
 
                 // Crank up enemy spawns
-                enemySpawnCooldown = (int) (enemySpawnCooldown * .65 + minEnemySpawnCooldown);
+                enemySpawnCooldown = (int) (enemySpawnCooldown * .9 + minEnemySpawnCooldown);
 //                System.out.println(enemySpawnCooldown);
             }
             timeSinceLastEnemySpawn -= deltaTime;
