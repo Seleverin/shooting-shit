@@ -16,8 +16,11 @@ public class SpeedItem extends Item {
 
     @Override
     public void activateAbility(Entity player){
-        player.setMovementSpeed((float)(player.getMovementSpeed() + (player.getMovementSpeed() * speedModifierAmount)));
-        System.out.println(speedModifierAmount + "   " + player.getMovementSpeed());
+        System.out.println("old: "+ player.getMovementSpeed());
+        float newMovementSpeed = (float)(player.getMovementSpeed() + (player.getMovementSpeed() * speedModifierAmount));
+        player.setMovementSpeed(newMovementSpeed);
+        System.out.println("new: "+newMovementSpeed);
+        System.out.println("modifier: "+speedModifierAmount);
 
         this.isDead = true;
     }

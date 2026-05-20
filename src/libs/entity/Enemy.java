@@ -13,12 +13,12 @@ public class Enemy extends Entity {
             new HealthItem(
                     (int)Math.floor(Math.random() * 25 + 25),
                     transform,
-                    new Collider2D(15,15)
+                    new Collider2D(20,20)
             ),
             new SpeedItem(
-                    (float)Math.floor(Math.random() * 1.2 + 1.05),
+                    (float)(Math.random() * 0.25 + 0.05),
                     transform,
-                    new Collider2D(15,15)
+                    new Collider2D(20,20)
             )
     };
 
@@ -67,6 +67,7 @@ public class Enemy extends Entity {
         health -= dmg;
         if (health < 0 && !isDead){
             Entity item = itemDrops[(int)(Math.random() * itemDrops.length)];
+//            Entity item = itemDrops[1];
             item.transform = transform;
             mainFrame.addEntity2AddingQueue(
                     item
