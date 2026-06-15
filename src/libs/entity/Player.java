@@ -15,6 +15,7 @@ public class Player extends Entity {
     public int attackDamage;
     public int bulletAmount;
     public float bulletSpread;
+    public int score;
 
     private BufferedImage activeSprite;
 
@@ -26,14 +27,16 @@ public class Player extends Entity {
 
     public Player(){}
 
-    public Player(int health, float moveSpeed, Transform2D transform, Collider2D collider) {
-        super(health, moveSpeed, transform, collider);
+    public Player(int health, float moveSpeed, Transform2D transform, Collider2D collider, String sprite) {
+        super(health, moveSpeed, transform, collider, sprite);
 
         // Default values
-        this.bulletAmount = 10;
+        this.bulletAmount = 1;
         this.shootCooldown = 500;
-        this.attackDamage = 5;
-        this.bulletSpread = .5f;
+        this.attackDamage = 10;
+        this.bulletSpread = .1f;
+
+        this.score = 0;
 
         lastHitTime = System.currentTimeMillis();
         lastShootTime = System.currentTimeMillis();
@@ -85,22 +88,14 @@ public class Player extends Entity {
                             1, 5f, attackDamage,
                             spawnPos,
                             new Collider2D(5,5, true),
-                            lookingDir
+                            lookingDir,
+                            "src/assets/player/bullet.png"
                     )
             );
         }
     }
 
-//    public void setActiveSprite(String src){
-//        try {
-//            this.activeSprite = ImageIO.read(
-//                    Objects.requireNonNull(getClass().getResource(src))
-//            );
-//        }
-//        catch (IOException e) {
-//            throw new RuntimeException("Sprite not found for Player ", e);
-//        }
-//    }
-
-//    public BufferedImage getActiveSprite(){ return activeSprite; }
+    public void addScore(int score){
+        this.score += score;
+    }
 }

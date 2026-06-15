@@ -4,11 +4,13 @@ import libs.entity.Enemy;
 import libs.entity.Entity;
 import libs.entity.Player;
 import libs.entity.Projectile;
-import libs.entity.item.HealthItem;
-import libs.entity.item.SpeedItem;
+import libs.entity.item.*;
+import libs.util.ConfigData;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 
 //
 // Class for displaying the game on screen according to data given by the MainFrame-Class
@@ -18,32 +20,21 @@ public class GamePanel extends JPanel {
     private MainFrame parentMainFrame;
 
     private Player player;
-    private final int entityScale = 20;
 
-    private final Image healthItemSprite = new ImageIcon("src/assets/items/health_item.png").getImage();
-    private final Image speedItemSprite = new ImageIcon("src/assets/items/speed_upgrade_item.png").getImage();
-    private final Image playerSprite = new ImageIcon("src/assets/player/player.png").getImage();
-    private final Image commonEnemySprite = new ImageIcon("src/assets/enemy/common_enemy.png").getImage();
+    private final Image backgroundSprite = new ImageIcon("src/assets/ground.png").getImage();
 
     public GamePanel(){}
 
-    public GamePanel(MainFrame mainFrame){
+    public GamePanel(MainFrame mainFrame) {
         this.parentMainFrame = mainFrame;
         this.player = mainFrame.getPlayer();
-
-        // load Sprites
-//        try {
-//            sprite_player = ImageIO.read(
-//                    Objects.requireNonNull(getClass().getResource("/assets/player/right-down.png"))
-//            );
-//        } catch (IOException e) {
-//            throw new RuntimeException("Image not found ", e);
-//        }
     }
 
     public void paint(Graphics g){
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
+
+        paintBackground(g2d);
 
         paintEntities(g2d);
 
@@ -52,10 +43,41 @@ public class GamePanel extends JPanel {
 
         paintHealthbar(g2d);
 
+        try {
+            printScore(g2d);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         // Debug
-//        paintHitboxes(g2d);
+        if(ConfigData.show_hitboxes) paintHitboxes(g2d);
     }
 
+
+    private void printScore(Graphics2D g2d) throws IOException, FontFormatException {
+        Font pixelFont = Font.createFont(
+                        Font.TRUETYPE_FONT,
+                        new File("src/assets/fonts/PressStart2P-Regular.ttf"))
+                .deriveFont(16f);
+
+        g2d.setFont(pixelFont);
+
+        g2d.drawString("Score: "+player.score, 10,20);
+    }
+
+    private void paintBackground(Graphics2D g2d){
+        int xTileCount = (int)(parentMainFrame.getWidth() / 64) + 1, yTileCount = (int)(parentMainFrame.getHeight() / 64) + 1;
+        for(int y=0; y<yTileCount; y++){
+            for(int x=0; x<xTileCount; x++){
+                g2d.drawImage(
+                        backgroundSprite,
+                        x * 64, y * 64,
+                        64, 64,
+                        this
+                );
+            }
+        }
+    }
 
     private void paintHealthbar(Graphics2D g2d){
         // Background
@@ -75,7 +97,7 @@ public class GamePanel extends JPanel {
 
     private void paintPlayer(Graphics2D g2d){
         g2d.drawImage(
-                playerSprite,
+                player.getSprite(),
                 (int)player.getTransform().x, (int)player.getTransform().y,
                 (int)player.getCollider().width,(int)player.getCollider().height,
                 this
@@ -90,61 +112,36 @@ public class GamePanel extends JPanel {
         g2d.drawRoundRect((int)parentMainFrame.getMouseTransform().x, (int)parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
 
         g2d.drawLine(
-                (int)player.getTransform().x + entityScale/2, (int)player.getTransform().y + entityScale/2,
+                (int)player.getTransform().x + 10, (int)player.getTransform().y + 10,
                 (int)parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, (int)parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
         );
     }
 
     private void paintEntities(Graphics2D g2d){
         for(Entity entity : parentMainFrame.getEntities()){
-            // Enemies
-            if(entity.getClass() == Enemy.class){
-//                int green = (int)(180 * (entity.getHealth() * 0.01));
-//                if (green > 225) green = 225;
-//
-//                if (green > 0){
+            if(entity.getClass() != Player.class){
+                g2d.drawImage(
+                        entity.getSprite(),
+                        (int)entity.getTransform().x, (int)entity.getTransform().y,
+                        (int)entity.getCollider().width,(int)entity.getCollider().height,
+                        this
+                );
 
-                    g2d.drawImage(
-                            commonEnemySprite,
-                            (int)entity.getTransform().x, (int)entity.getTransform().y,
-                            (int)entity.getCollider().width,(int)entity.getCollider().height,
-                            this
+                if(entity.getClass() == Enemy.class){
+                    // Background
+                    g2d.setColor(Color.darkGray);
+                    g2d.fillRect(
+                            (int)entity.getTransform().x, (int)(entity.getTransform().y - entity.getCollider().height * 0.35),
+                            (int)entity.getCollider().width,6
                     );
-
-//                    g2d.setColor(new Color(240, green, 24, 200));
-//                    g2d.fillRoundRect(
-//                            (int)entity.getTransform().x, (int)entity.getTransform().y,
-//                            (int)entity.getCollider().width,(int)entity.getCollider().height,
-//                            100,100
-//                    );
-//                }
-            }
-            // Projectiles
-            else if(entity.getClass() == Projectile.class){
-//                int bulletColor = (int)(Math.floor(Math.random() * 200));
-                g2d.setColor(new Color(50, 50, 50));
-                g2d.fillRoundRect(
-                        (int)entity.getTransform().x, (int)entity.getTransform().y,
-                        (int)entity.getCollider().width,(int)entity.getCollider().height,
-                        100,100
-                );
-            }
-            // Items
-            else if(entity.getClass() == HealthItem.class){
-                g2d.drawImage(
-                        healthItemSprite,
-                        (int)entity.getTransform().x, (int)entity.getTransform().y,
-                        (int)entity.getCollider().width,(int)entity.getCollider().height,
-                        this
-                );
-            }
-            else if(entity.getClass() == SpeedItem.class){
-                g2d.drawImage(
-                        speedItemSprite,
-                        (int)entity.getTransform().x, (int)entity.getTransform().y,
-                        (int)entity.getCollider().width,(int)entity.getCollider().height,
-                        this
-                );
+                    // Fill
+                    g2d.setColor(Color.red);
+                    g2d.fillRect(
+                            (int)entity.getTransform().x, (int)(entity.getTransform().y - entity.getCollider().height * 0.35),
+                            (int)(entity.getHealth() / (entity.getMaxHealth() / entity.getCollider().width)),6
+                    );
+                    g2d.setColor(Color.BLACK);
+                }
             }
         }
 

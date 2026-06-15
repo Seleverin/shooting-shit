@@ -13,8 +13,8 @@ public class Projectile extends Entity {
     // Destroy timer
     private long timeToDestroy;
 
-    public Projectile(int health, float moveSpeed, int attackDamage, Transform2D transform, Collider2D collider, Transform2D direction) {
-        super(health, moveSpeed, transform, collider);
+    public Projectile(int health, float moveSpeed, int attackDamage, Transform2D transform, Collider2D collider, Transform2D direction, String sprite) {
+        super(health, moveSpeed, transform, collider, sprite);
 
         this.attackDamage = attackDamage;
 

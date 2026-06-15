@@ -1,14 +1,15 @@
 package libs.entity.item;
 
 import libs.entity.Entity;
+import libs.entity.Player;
 import libs.ui.MainFrame;
 import libs.util.Collider2D;
 import libs.util.Transform2D;
 
 public abstract class Item extends Entity {
 
-    public Item(Transform2D transform, Collider2D collider) {
-        super(transform, collider);
+    public Item(Transform2D transform, Collider2D collider, String sprite) {
+        super(transform, collider, sprite);
     }
 
     @Override
@@ -23,5 +24,5 @@ public abstract class Item extends Entity {
         return;
     }
 
-    public abstract void activateAbility(Entity reciever);
+    public abstract void activateAbility(Player reciever);
 }

@@ -6,6 +6,7 @@ import libs.entity.Player;
 import libs.entity.Projectile;
 import libs.entity.item.HealthItem;
 import libs.util.Collider2D;
+import libs.util.ConfigData;
 import libs.util.Transform2D;
 
 import javax.swing.*;
@@ -21,12 +22,14 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     // Player
     private Player player = new Player(
             100, 3f,
-            new Transform2D(15,15), new Collider2D(30,30)
+            new Transform2D(15,15), new Collider2D(30,30),
+            "src/assets/player/player.png"
     );
     private Transform2D mouseTransform = new Transform2D();
     private boolean up, down, left, right, shooting;
 
     // Entities
+    private int wave = 1;
     private int enemySpawnCooldown = 10000;
     private int minEnemySpawnCooldown = 750;
     private int timeSinceLastEnemySpawn = 3000;
@@ -39,7 +42,8 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
     // Main Game-Loop
     public MainFrame(){
-        setSize(500,500);
+        setSize(ConfigData.window_width,ConfigData.window_height);
+        setResizable(true);
 
         addKeyListener(this);
         addMouseMotionListener(this);
@@ -62,7 +66,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
         // Main Game-Loop (60 FPS)
         //
         long startTime = System.currentTimeMillis();
-        int deltaTime = 16;
+        int deltaTime = ConfigData.game_loop_delta_time;
         Timer timer = new Timer(deltaTime, e -> {
             // Close game when player dies
             if (player.isDead) return;
@@ -72,24 +76,42 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
             // Spawn stuff
             if (timeSinceLastEnemySpawn <= 0) {
-                float scale = (float)(Math.random() + 0.45);
-                entities.add(
+                final Transform2D[] spawnpoints = {
+                        new Transform2D(0,0),
+                        new Transform2D(getWidth(),getHeight()),
+                        new Transform2D(0,getHeight()),
+                        new Transform2D(getWidth(),0)
+                };
+
+                float scale = (float)(Math.random() * 0.8 + 0.5);
+                float wave_scale = (float)( 1 + wave / 10);
+                System.out.println(scale);
+
+                if(wave % 10 == 0){
+                    // Spawn boss enemy
+                    entities.add(
                         new Enemy(
-                                (int)(100 * scale), 2f / scale, (int)(25 * scale),
-                                new Transform2D(250,250), new Collider2D((int)(30 * scale),(int)(30 * scale))
-                        )
-                );
-//                entities.add(
-//                        new Enemy(
-//                                (int)(500 * scale), 2f / scale, (int)(45 * scale),
-//                                new Transform2D(250,250), new Collider2D((int)(60 * scale),(int)(60 * scale))
-//                        )
-//                );
+                                (int)(500 * scale * wave_scale), 2f / scale * wave_scale, (int)(45 * scale * wave_scale),
+                                spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(70 * scale),(int)(70 * scale)),
+                                "src/assets/enemy/boss_enemy.png"
+                        ));
+                }
+                else{
+                    entities.add(
+                            new Enemy(
+                                    (int)(100 * scale * wave_scale), 2f / scale * wave_scale, (int)(25 * scale * wave_scale),
+                                    spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(30 * scale),(int)(30 * scale)),
+                                    "src/assets/enemy/common_enemy.png"
+                            )
+                    );
+                }
                 timeSinceLastEnemySpawn = enemySpawnCooldown;
 
+                // Increase wave counter
+                wave += 1;
+
                 // Crank up enemy spawns
-                enemySpawnCooldown = (int) (enemySpawnCooldown * .9 + minEnemySpawnCooldown);
-//                System.out.println(enemySpawnCooldown);
+                enemySpawnCooldown = (int) (enemySpawnCooldown * .75 + minEnemySpawnCooldown);
             }
             timeSinceLastEnemySpawn -= deltaTime;
 
@@ -110,18 +132,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
             if (right) player.getTransform().x += (int) player.getMovementSpeed();
 
             if (shooting) player.shoot(mouseTransform, entities);
-
-            // Set sprites horizontally & vertically
-//            if(up) player.setActiveSprite("/assets/player/up.png");
-//            if(down) player.setActiveSprite("/assets/player/down.png");
-//            if(right) player.setActiveSprite("/assets/player/right.png");
-//            if(left) player.setActiveSprite("/assets/player/left.png");
-//
-//            // Set sprites diagonally
-//            if(up && right) player.setActiveSprite("/assets/player/right-up.png");
-//            if(up && left) player.setActiveSprite("/assets/player/left-up.png");
-//            if(down && right) player.setActiveSprite("/assets/player/right-down.png");
-//            if(down && left) player.setActiveSprite("/assets/player/left-down.png");
 
             // Destroy dead entities
             destroyEntites();
