@@ -2,6 +2,7 @@ package libs.entity;
 
 import libs.ui.MainFrame;
 import libs.util.Collider2D;
+import libs.util.ConfigData;
 import libs.util.Transform2D;
 
 import javax.imageio.ImageIO;
@@ -84,7 +85,7 @@ public class Player extends Entity {
             entities.add(new Projectile(
                             1, 5f, attackDamage,
                             spawnPos,
-                            new Collider2D(5,5, true),
+                            new Collider2D(5 * ConfigData.entity_scale,5 * ConfigData.entity_scale, true),
                             lookingDir,
                             "src/assets/player/bullet.png"
                     )

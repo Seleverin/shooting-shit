@@ -22,7 +22,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
     // Player
     private Player player = new Player(
             100, 3f,
-            new Transform2D(15,15), new Collider2D(30,30),
+            new Transform2D(15 * ConfigData.entity_scale,15 * ConfigData.entity_scale), new Collider2D(30 * ConfigData.entity_scale,30 * ConfigData.entity_scale),
             "src/assets/player/player.png"
     );
     private Transform2D mouseTransform = new Transform2D();
@@ -91,7 +91,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
                     entities.add(
                         new Enemy(
                                 (int)(500 * scale * wave_scale), 2f / scale * wave_scale, (int)(45 * scale * wave_scale),
-                                spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(70 * scale),(int)(70 * scale)),
+                                spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(70 * scale * ConfigData.entity_scale),(int)(70 * scale * ConfigData.entity_scale)),
                                 "src/assets/enemy/boss_enemy.png"
                         ));
                 }
@@ -99,7 +99,7 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
                     entities.add(
                             new Enemy(
                                     (int)(100 * scale * wave_scale), 2f / scale * wave_scale, (int)(25 * scale * wave_scale),
-                                    spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(30 * scale),(int)(30 * scale)),
+                                    spawnpoints[(int)Math.floor(Math.random()*spawnpoints.length)], new Collider2D((int)(30 * scale * ConfigData.entity_scale),(int)(30 * scale * ConfigData.entity_scale)),
                                     "src/assets/enemy/common_enemy.png"
                             )
                     );

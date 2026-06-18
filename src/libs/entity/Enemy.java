@@ -3,42 +3,44 @@ package libs.entity;
 import libs.entity.item.*;
 import libs.ui.MainFrame;
 import libs.util.Collider2D;
+import libs.util.ConfigData;
 import libs.util.Transform2D;
 
 public class Enemy extends Entity {
     public int attackDamage;
     public Transform2D knockback;
 
+    private final Collider2D itemCollider = new Collider2D(20 * ConfigData.entity_scale, 20 * ConfigData.entity_scale);
     private final Entity[] itemDrops = {
             new HealthItem(
                     (int)Math.floor(Math.random() * 25 + 25),
                     transform,
-                    new Collider2D(25,25),
+                    itemCollider,
                     "src/assets/items/health_item.png"
             ),
             new SpeedItem(
                     (float)(Math.random() * 0.2 + 0.05),
                     transform,
-                    new Collider2D(25,25),
+                    itemCollider,
                     "src/assets/items/speed_upgrade_item.png"
             ),
             new AttackSpeedItem(
                     (float)(Math.random() * 0.1 + 0.05),
                     transform,
-                    new Collider2D(25,25),
+                    itemCollider,
                     "src/assets/items/attack_speed_upgrade.png"
             ),
             new AttackDamageItem(
                     (float)(Math.random() * 0.25 + 0.1),
                     transform,
-                    new Collider2D(25,25),
+                    itemCollider,
                     "src/assets/items/attack_damage_upgrade.png"
             ),
             new BulletAmountUpgrade(
                     1,
                     (float)(Math.random() * 0.5 + 1),
                     transform,
-                    new Collider2D(25,25),
+                    itemCollider,
                     "src/assets/items/bullet_amount_upgrade.png"
             )
     };

@@ -84,13 +84,13 @@ public class GamePanel extends JPanel {
         g2d.setColor(Color.darkGray);
         g2d.fillRect(
                 (int)player.getTransform().x, (int)(player.getTransform().y - player.getCollider().height * 0.35),
-                (int)player.getCollider().width,6
+                (int)player.getCollider().width, (int) (6 * ConfigData.entity_scale)
         );
         // Fill
         g2d.setColor(Color.red);
         g2d.fillRect(
                 (int)player.getTransform().x, (int)(player.getTransform().y - player.getCollider().height * 0.35),
-                (int)(player.getHealth() / (player.getMaxHealth() / player.getCollider().width)),6
+                (int)(player.getHealth() / (player.getMaxHealth() / player.getCollider().width)),(int) (6 * ConfigData.entity_scale)
         );
         g2d.setColor(Color.BLACK);
     }
@@ -112,7 +112,7 @@ public class GamePanel extends JPanel {
         g2d.drawRoundRect((int)parentMainFrame.getMouseTransform().x, (int)parentMainFrame.getMouseTransform().y, distance2PlayerScale,distance2PlayerScale, 1000, 1000);
 
         g2d.drawLine(
-                (int)player.getTransform().x + 10, (int)player.getTransform().y + 10,
+                (int) ((int)player.getTransform().x + player.getCollider().width / 2), (int) ((int)player.getTransform().y + player.getCollider().height / 2),
                 (int)parentMainFrame.getMouseTransform().x +distance2PlayerScale/2, (int)parentMainFrame.getMouseTransform().y +distance2PlayerScale/2
         );
     }
@@ -132,13 +132,13 @@ public class GamePanel extends JPanel {
                     g2d.setColor(Color.darkGray);
                     g2d.fillRect(
                             (int)entity.getTransform().x, (int)(entity.getTransform().y - entity.getCollider().height * 0.35),
-                            (int)entity.getCollider().width,6
+                            (int)entity.getCollider().width, (int) (6 * ConfigData.entity_scale)
                     );
                     // Fill
                     g2d.setColor(Color.red);
                     g2d.fillRect(
                             (int)entity.getTransform().x, (int)(entity.getTransform().y - entity.getCollider().height * 0.35),
-                            (int)(entity.getHealth() / (entity.getMaxHealth() / entity.getCollider().width)),6
+                            (int)(entity.getHealth() / (entity.getMaxHealth() / entity.getCollider().width)),(int) (6 * ConfigData.entity_scale)
                     );
                     g2d.setColor(Color.BLACK);
                 }
