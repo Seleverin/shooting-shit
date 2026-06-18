@@ -85,7 +85,6 @@ public class MainFrame extends JFrame implements KeyListener, MouseListener, Mou
 
                 float scale = (float)(Math.random() * 0.8 + 0.5);
                 float wave_scale = (float)( 1 + wave / 10);
-                System.out.println(scale);
 
                 if(wave % 10 == 0){
                     // Spawn boss enemy

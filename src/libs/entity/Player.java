@@ -54,10 +54,7 @@ public class Player extends Entity {
 
         health -= dmg;
 
-        if (health > 0){
-            System.out.println(health);
-        }
-        else {
+        if (health <= 0){
             isDead = true;
         }
     }

@@ -19,9 +19,6 @@ public class BulletSizeItem extends Item {
         int newAttckDmg = (int)(player.attackDamage + (player.attackDamage * attackDamageModifier));
         player.attackDamage = newAttckDmg;
 
-        System.out.println("new: "+newAttckDmg);
-        System.out.println("modifier: "+attackDamageModifier);
-
         this.isDead = true;
     }
 }
